@@ -1,0 +1,220 @@
+# MANDARIN ODYSSEY — ATUALIZAÇÃO DA ESPECIFICAÇÃO TÉCNICA
+
+## 1. STACK TECNOLÓGICA DEFINITIVA
+
+O projeto deve utilizar a seguinte arquitetura:
+
+### Frontend
+- JavaScript Vanilla (ES Modules).
+- Phaser 3 como motor de jogo 2D.
+- HTML5.
+- CSS3.
+- IndexedDB para persistência local.
+- Web Audio API quando necessário para funcionalidades de áudio complementares.
+
+Não utilizar React, Vue, Angular, TypeScript ou outros frameworks de frontend.
+
+O Phaser 3 é a única biblioteca principal de desenvolvimento do jogo e deve ser utilizado para renderização, cenas, câmera, sprites, animações, física e gerenciamento de eventos.
+
+### Hospedagem
+GitHub Pages.
+
+O jogo deve ser publicado como aplicação estática, utilizando caminhos relativos e configuração compatível com GitHub Pages.
+
+### Backend
+Firebase:
+- Cloud Functions para comunicação com IA e TTS.
+- Firestore para armazenamento remoto opcional.
+- Secret Manager para chaves privadas.
+- Firebase App Check como proteção complementar, quando aplicável.
+- Firebase Storage para arquivos de áudio, se necessário.
+
+### Persistência
+IndexedDB será o armazenamento principal do progresso do jogador.
+
+Não exigir criação de conta ou login na primeira versão.
+
+### Inteligência artificial
+A comunicação com modelos de linguagem deve ocorrer exclusivamente pelo backend.
+
+Nunca expor chaves privadas no frontend.
+
+---
+
+## 2. UTILIZAÇÃO DO PHASER 3
+
+Utilizar Phaser 3 como motor central do jogo.
+
+Não implementar manualmente funcionalidades que o Phaser já oferece de maneira adequada.
+
+Utilizar:
+
+- Phaser.Game para inicialização.
+- Phaser.Scene para gerenciamento das cenas.
+- Phaser.Physics.Arcade para colisões e movimentação.
+- Phaser.GameObjects para objetos e personagens.
+- Phaser.Tilemaps para mapas baseados em tilesets.
+- Phaser.Animations para animações.
+- Phaser.Cameras.Scene2D para controle de câmera.
+- Phaser.Input para teclado, mouse e suporte à interação.
+- Phaser.Loader para carregamento de assets.
+- Phaser.Sound para gerenciamento de áudio quando apropriado.
+
+Utilizar física Arcade para movimentação e colisões, sem implementar um sistema de física paralelo.
+
+Configurar pixel art:
+- pixelArt: true.
+- antialias: false.
+- roundPixels: true.
+- image-rendering: pixelated.
+
+Manter resolução lógica de 320 × 180 pixels ou proporção equivalente em widescreen, com escala responsiva.
+
+A resolução final deve preservar a proporção original e evitar distorção dos sprites.
+
+---
+
+## 3. ARQUITETURA DE CENAS
+
+Organizar o jogo em cenas independentes.
+
+### BootScene
+Inicialização do jogo e configurações básicas.
+
+### PreloadScene
+Carregamento de sprites, tilesets, mapas, fontes e áudios.
+
+### MenuScene
+Menu principal, configurações e opção de continuar.
+
+### WorldScene
+Exploração do mundo, movimentação, colisões, NPCs e objetos interativos.
+
+### DialogueScene
+Interface de diálogo com personagens, comunicação com IA e reprodução de áudio.
+
+### UIScene
+HUD, indicadores de missão, experiência e elementos permanentes da interface.
+
+### InventoryScene
+Inventário e objetos coletados.
+
+### VocabularyScene
+Livro de vocabulário, pesquisa e revisão.
+
+### QuestScene
+Painel de missões e objetivos.
+
+### AdminScene
+Painel pedagógico, estatísticas, auditoria e exportação.
+
+As cenas devem ter responsabilidades bem definidas e compartilhar informações por meio de sistemas de estado e eventos.
+
+Evitar duplicação de lógica.
+
+---
+
+## 4. ORGANIZAÇÃO DOS ARQUIVOS
+
+Manter arquitetura modular.
+
+Organização sugerida:
+
+src/
+├── main.js
+│
+├── config/
+│   └── gameConfig.js
+│
+├── scenes/
+│   ├── BootScene.js
+│   ├── PreloadScene.js
+│   ├── MenuScene.js
+│   ├── WorldScene.js
+│   ├── DialogueScene.js
+│   ├── UIScene.js
+│   ├── InventoryScene.js
+│   ├── VocabularyScene.js
+│   ├── QuestScene.js
+│   └── AdminScene.js
+│
+├── entities/
+│   ├── Player.js
+│   ├── NPC.js
+│   └── InteractableObject.js
+│
+├── systems/
+│   ├── DialogueSystem.js
+│   ├── QuestSystem.js
+│   ├── InventorySystem.js
+│   ├── ProgressionSystem.js
+│   ├── VocabularyManager.js
+│   ├── ReviewSystem.js
+│   ├── AudioManager.js
+│   └── EventManager.js
+│
+├── world/
+│   ├── WorldManager.js
+│   ├── MapManager.js
+│   ├── CollisionManager.js
+│   └── NPCManager.js
+│
+├── pedagogy/
+│   ├── LexicalValidator.js
+│   ├── HSKManager.js
+│   └── AuditManager.js
+│
+├── storage/
+│   ├── Database.js
+│   ├── SaveManager.js
+│   └── Migrations.js
+│
+├── services/
+│   ├── APIClient.js
+│   ├── AIService.js
+│   └── TTSService.js
+│
+└── data/
+    ├── maps/
+    ├── npcs/
+    ├── quests/
+    └── vocabulary/
+
+O backend deve permanecer em diretório independente.
+
+---
+
+## 5. DIRETRIZES DE DESENVOLVIMENTO
+
+1. Utilizar os recursos nativos do Phaser 3 sempre que possível.
+2. Não misturar lógica pedagógica com lógica de renderização.
+3. Manter sistemas de jogo independentes das cenas.
+4. Utilizar eventos para comunicação entre sistemas.
+5. Evitar dependências adicionais desnecessárias.
+6. Não concentrar toda a lógica em main.js.
+7. Garantir que os dados pedagógicos possam ser testados independentemente do motor.
+8. Manter compatibilidade com GitHub Pages.
+9. Testar cada cena individualmente.
+10. Não avançar para a próxima fase sem validar os requisitos da fase atual.
+
+O Phaser 3 não deve ser utilizado como substituto da arquitetura de software. O projeto precisa continuar modular, testável e expansível.
+
+---
+
+## 6. DIRETRIZ DE IMPLEMENTAÇÃO
+
+Desenvolver o jogo por fases:
+
+1. Configuração do Phaser 3, cenas, personagem, movimentação e câmera.
+2. Tilesets, mapas, colisões, NPCs e animações.
+3. Sistema de interação, diálogos, missões e inventário.
+4. Sistema pedagógico e controle lexical.
+5. Firebase, IA e validação de respostas.
+6. TTS, IndexedDB e persistência.
+7. Conteúdo, polimento visual e publicação.
+
+Preservar integralmente todos os demais requisitos pedagógicos, narrativos, visuais e funcionais da especificação original do Mandarin Odyssey.
+
+A adoção do Phaser 3 não autoriza simplificar ou remover nenhuma funcionalidade prevista no projeto.
+
+**Objetivo técnico:** construir um RPG 2D de qualidade, com arquitetura modular e sistemas pedagógicos rigorosos, utilizando Phaser 3 como motor de jogo e JavaScript Vanilla como linguagem principal.
