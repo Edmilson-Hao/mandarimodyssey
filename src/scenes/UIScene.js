@@ -1,5 +1,5 @@
 /**
- * UIScene — HUD permanente (MVP mínimo).
+ * UIScene — HUD permanente (versão 1.0).
  */
 
 import { DEPTH } from '../config/gameConfig.js';
@@ -10,17 +10,15 @@ export class UIScene extends Phaser.Scene {
   }
 
   create() {
-    // Indicador de controles (canto superior esquerdo)
     this.hint = this.add.text(4, 4, 'WASD · E interagir', {
       fontFamily: 'Courier New',
       fontSize: '7px',
-      color: '#aaaaaa',
-      backgroundColor: '#00000088',
-      padding: { x: 3, y: 2 }
+      color: '#cccccc',
+      backgroundColor: '#00000099',
+      padding: { x: 4, y: 2 }
     }).setDepth(DEPTH.UI).setScrollFactor(0);
 
-    // Versão / build
-    this.add.text(316, 4, 'MVP 0.1', {
+    this.add.text(316, 4, 'v1.0', {
       fontFamily: 'Courier New',
       fontSize: '6px',
       color: '#555555'

@@ -1,7 +1,5 @@
 /**
- * PreloadScene — Carrega / gera assets do MVP.
- * No MVP usamos texturas geradas proceduralmente (sem arquivos PNG externos).
- * Na versão final, substituir por load.image / load.spritesheet reais.
+ * PreloadScene — Carrega todos os assets PNG reais da versão 1.0.
  */
 
 export class PreloadScene extends Phaser.Scene {
@@ -10,121 +8,127 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    // Barra de progresso simples
     const width = this.cameras.main.width;
     const height = this.cameras.main.height;
 
+    // Fundo da tela de loading
+    this.add.rectangle(width / 2, height / 2, width, height, 0x1a1a2e);
+
+    this.add.text(width / 2, height / 2 - 30, 'MANDARIN ODYSSEY', {
+      fontFamily: 'Courier New',
+      fontSize: '12px',
+      color: '#e8b86d'
+    }).setOrigin(0.5);
+
     const progressBox = this.add.graphics();
-    progressBox.fillStyle(0x222222, 0.8);
-    progressBox.fillRect(width / 2 - 80, height / 2 - 12, 160, 24);
+    progressBox.fillStyle(0x222222, 0.9);
+    progressBox.fillRect(width / 2 - 80, height / 2 - 6, 160, 14);
 
     const progressBar = this.add.graphics();
+
+    const loadingText = this.add.text(width / 2, height / 2 + 20, 'Carregando...', {
+      fontFamily: 'Courier New',
+      fontSize: '8px',
+      color: '#888888'
+    }).setOrigin(0.5);
 
     this.load.on('progress', (value) => {
       progressBar.clear();
       progressBar.fillStyle(0xe8b86d, 1);
-      progressBar.fillRect(width / 2 - 76, height / 2 - 8, 152 * value, 16);
+      progressBar.fillRect(width / 2 - 78, height / 2 - 4, 156 * value, 10);
+      loadingText.setText(`Carregando... ${Math.floor(value * 100)}%`);
     });
 
     this.load.on('complete', () => {
       progressBar.destroy();
       progressBox.destroy();
+      loadingText.destroy();
     });
 
-    // Gera texturas placeholder (não precisa de arquivos externos)
-    this.generatePlaceholderTextures();
-  }
+    // ===== SPRITES =====
+    this.load.spritesheet('player', 'assets/sprites/player.png', {
+      frameWidth: 32,
+      frameHeight: 48
+    });
+    this.load.spritesheet('npc_merchant', 'assets/sprites/npc_merchant.png', {
+      frameWidth: 32,
+      frameHeight: 48
+    });
 
-  /**
-   * Gera texturas simples com Graphics + generateTexture.
-   * Substitui assets reais até a produção artística estar pronta.
-   */
-  generatePlaceholderTextures() {
-    // --- Player (32x48) ---
-    const playerGfx = this.make.graphics({ x: 0, y: 0, add: false });
-    // corpo
-    playerGfx.fillStyle(0x4a90d9, 1);
-    playerGfx.fillRect(8, 16, 16, 24);
-    // cabeça
-    playerGfx.fillStyle(0xf5d0a9, 1);
-    playerGfx.fillRect(10, 4, 12, 14);
-    // cabelo
-    playerGfx.fillStyle(0x2c1810, 1);
-    playerGfx.fillRect(10, 2, 12, 6);
-    // olhos
-    playerGfx.fillStyle(0x1a1a1a, 1);
-    playerGfx.fillRect(12, 8, 2, 2);
-    playerGfx.fillRect(18, 8, 2, 2);
-    playerGfx.generateTexture('player', 32, 48);
-    playerGfx.destroy();
+    // ===== TILES =====
+    this.load.image('tile_grass_01', 'assets/tiles/tile_grass_01.png');
+    this.load.image('tile_grass_02', 'assets/tiles/tile_grass_02.png');
+    this.load.image('tile_grass_03', 'assets/tiles/tile_grass_03.png');
+    this.load.image('tile_path_01', 'assets/tiles/tile_path_01.png');
+    this.load.image('tile_path_02', 'assets/tiles/tile_path_02.png');
+    this.load.image('tile_water_01', 'assets/tiles/tile_water_01.png');
+    this.load.image('tile_water_02', 'assets/tiles/tile_water_02.png');
+    this.load.image('tile_wall', 'assets/tiles/tile_wall.png');
+    this.load.image('tile_tree', 'assets/tiles/tile_tree.png');
+    this.load.image('tile_flower', 'assets/tiles/tile_flower.png');
+    this.load.image('tile_rock', 'assets/tiles/tile_rock.png');
 
-    // --- NPC (32x48) ---
-    const npcGfx = this.make.graphics({ x: 0, y: 0, add: false });
-    npcGfx.fillStyle(0xc45c26, 1); // roupa laranja tradicional
-    npcGfx.fillRect(8, 16, 16, 24);
-    npcGfx.fillStyle(0xf5d0a9, 1);
-    npcGfx.fillRect(10, 4, 12, 14);
-    npcGfx.fillStyle(0x1a1a1a, 1);
-    npcGfx.fillRect(10, 2, 12, 6);
-    npcGfx.fillStyle(0x1a1a1a, 1);
-    npcGfx.fillRect(12, 8, 2, 2);
-    npcGfx.fillRect(18, 8, 2, 2);
-    // chapéu simples
-    npcGfx.fillStyle(0x8b0000, 1);
-    npcGfx.fillRect(8, 0, 16, 4);
-    npcGfx.generateTexture('npc_merchant', 32, 48);
-    npcGfx.destroy();
-
-    // --- Tiles 16x16 ---
-    // Grama
-    const grass = this.make.graphics({ x: 0, y: 0, add: false });
-    grass.fillStyle(0x3d8b37, 1);
-    grass.fillRect(0, 0, 16, 16);
-    grass.fillStyle(0x4caf50, 1);
-    grass.fillRect(2, 2, 4, 4);
-    grass.fillRect(10, 8, 3, 3);
-    grass.generateTexture('tile_grass', 16, 16);
-    grass.destroy();
-
-    // Caminho de terra
-    const path = this.make.graphics({ x: 0, y: 0, add: false });
-    path.fillStyle(0xa67c52, 1);
-    path.fillRect(0, 0, 16, 16);
-    path.fillStyle(0x8b6914, 1);
-    path.fillRect(3, 3, 2, 2);
-    path.fillRect(11, 10, 2, 2);
-    path.generateTexture('tile_path', 16, 16);
-    path.destroy();
-
-    // Água
-    const water = this.make.graphics({ x: 0, y: 0, add: false });
-    water.fillStyle(0x2e86ab, 1);
-    water.fillRect(0, 0, 16, 16);
-    water.fillStyle(0x4fc3f7, 0.6);
-    water.fillRect(2, 4, 6, 2);
-    water.generateTexture('tile_water', 16, 16);
-    water.destroy();
-
-    // Parede / obstáculo
-    const wall = this.make.graphics({ x: 0, y: 0, add: false });
-    wall.fillStyle(0x5d4e37, 1);
-    wall.fillRect(0, 0, 16, 16);
-    wall.fillStyle(0x3e2723, 1);
-    wall.fillRect(0, 0, 16, 2);
-    wall.fillRect(0, 14, 16, 2);
-    wall.generateTexture('tile_wall', 16, 16);
-    wall.destroy();
-
-    // Indicador de interação (exclamação)
-    const excl = this.make.graphics({ x: 0, y: 0, add: false });
-    excl.fillStyle(0xffd700, 1);
-    excl.fillRect(6, 0, 4, 10);
-    excl.fillRect(6, 12, 4, 4);
-    excl.generateTexture('interact_marker', 16, 16);
-    excl.destroy();
+    // ===== UI =====
+    this.load.image('dialogue_box', 'assets/ui/dialogue_box.png');
+    this.load.image('interact_marker', 'assets/ui/interact_marker.png');
+    this.load.image('button', 'assets/ui/button.png');
   }
 
   create() {
+    this.createAnimations();
     this.scene.start('MenuScene');
+  }
+
+  /**
+   * Cria todas as animações a partir dos spritesheets.
+   * Layout do sheet: colunas = frames (0=idle, 1=walk1, 2=walk2)
+   *                  linhas  = direções (0=down, 1=left, 2=right, 3=up)
+   */
+  createAnimations() {
+    const dirs = ['down', 'left', 'right', 'up'];
+
+    // Player
+    dirs.forEach((dir, row) => {
+      // idle (frame único)
+      this.anims.create({
+        key: `player_idle_${dir}`,
+        frames: [{ key: 'player', frame: row * 3 + 0 }],
+        frameRate: 1,
+        repeat: -1
+      });
+      // walk
+      this.anims.create({
+        key: `player_walk_${dir}`,
+        frames: [
+          { key: 'player', frame: row * 3 + 1 },
+          { key: 'player', frame: row * 3 + 0 },
+          { key: 'player', frame: row * 3 + 2 },
+          { key: 'player', frame: row * 3 + 0 }
+        ],
+        frameRate: 8,
+        repeat: -1
+      });
+    });
+
+    // NPC Merchant
+    dirs.forEach((dir, row) => {
+      this.anims.create({
+        key: `npc_merchant_idle_${dir}`,
+        frames: [{ key: 'npc_merchant', frame: row * 3 + 0 }],
+        frameRate: 1,
+        repeat: -1
+      });
+      this.anims.create({
+        key: `npc_merchant_walk_${dir}`,
+        frames: [
+          { key: 'npc_merchant', frame: row * 3 + 1 },
+          { key: 'npc_merchant', frame: row * 3 + 0 },
+          { key: 'npc_merchant', frame: row * 3 + 2 },
+          { key: 'npc_merchant', frame: row * 3 + 0 }
+        ],
+        frameRate: 6,
+        repeat: -1
+      });
+    });
   }
 }
