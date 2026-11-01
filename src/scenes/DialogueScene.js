@@ -39,7 +39,7 @@ const DIALOGUES = {
       { speaker: '陈先生', hanzi: '请坐，喝茶。', pinyin: 'Qǐng zuò, hē chá.', pt: 'Por favor, sente-se e beba chá.' },
       { speaker: '陈先生', hanzi: '这是绿茶。', pinyin: 'Zhè shì lǜchá.', pt: 'Isto é chá verde.' }
     ],
-    onComplete: null
+    onComplete: () => { quests.completeStep("first_meeting", "talk_chen"); }
   },
   default: {
     lines: [

@@ -1,5 +1,5 @@
 /**
- * MenuScene — Menu principal legível (v1.2)
+ * MenuScene — Menu principal legível (v1.3)
  */
 
 export class MenuScene extends Phaser.Scene {
@@ -62,7 +62,7 @@ export class MenuScene extends Phaser.Scene {
       strokeThickness: 2
     }).setOrigin(0.5);
 
-    this.add.text(width / 2, height - 14, 'v1.2  ·  Ilha do Despertar', {
+    this.add.text(width / 2, height - 14, 'v1.3  ·  Ilha do Despertar · Mapa Real', {
       fontFamily: 'Arial, sans-serif',
       fontSize: '9px',
       color: '#666666',

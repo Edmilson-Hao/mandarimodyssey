@@ -1,6 +1,5 @@
 /**
- * QuestSystem — Sistema de missões mínimo.
- * Estados: locked | active | completed
+ * QuestSystem — v1.3
  */
 
 import { events } from './EventManager.js';
@@ -10,10 +9,11 @@ const QUESTS = {
     id: 'first_meeting',
     title: 'Primeiro Encontro',
     titleZh: '第一次见面',
-    description: 'Fale com o mercador e com o sábio da vila.',
+    description: 'Conheça os habitantes da Ilha do Despertar.',
     steps: [
-      { id: 'talk_merchant', text: 'Falar com o 老板', done: false },
-      { id: 'talk_scholar', text: 'Falar com o 先生', done: false }
+      { id: 'talk_merchant', text: 'Falar com o 老板 (mercador)', done: false },
+      { id: 'talk_scholar', text: 'Falar com o 先生 (sábio)', done: false },
+      { id: 'talk_chen', text: 'Visitar a casa de chá (陈先生)', done: false }
     ],
     reward: { id: 'red_apple', name: 'Maçã Vermelha', nameZh: '红苹果', qty: 1 }
   }
@@ -22,7 +22,6 @@ const QUESTS = {
 class QuestSystem {
   constructor() {
     this.quests = {};
-    // inicia a primeira missão já ativa
     this.activate('first_meeting');
   }
 
@@ -38,22 +37,15 @@ class QuestSystem {
   completeStep(questId, stepId) {
     const q = this.quests[questId];
     if (!q || q.status !== 'active') return false;
-
     const step = q.steps.find(s => s.id === stepId);
     if (!step || step.done) return false;
-
     step.done = true;
     events.emit('quest-step-completed', { questId, stepId });
-
-    // verifica se todas as steps estão feitas
     if (q.steps.every(s => s.done)) {
       q.status = 'completed';
       events.emit('quest-completed', q);
-      if (q.reward) {
-        events.emit('quest-reward', q.reward);
-      }
+      if (q.reward) events.emit('quest-reward', q.reward);
     }
-
     events.emit('quest-updated', this.getActiveQuests());
     return true;
   }
@@ -64,13 +56,6 @@ class QuestSystem {
 
   getQuest(id) {
     return this.quests[id] || null;
-  }
-
-  isStepDone(questId, stepId) {
-    const q = this.quests[questId];
-    if (!q) return false;
-    const step = q.steps.find(s => s.id === stepId);
-    return step ? step.done : false;
   }
 }
 
