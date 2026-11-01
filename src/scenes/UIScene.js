@@ -1,5 +1,5 @@
 /**
- * UIScene — HUD com missão ativa e inventário (v1.1).
+ * UIScene — HUD legível (v1.2)
  */
 
 import { DEPTH } from '../config/gameConfig.js';
@@ -14,46 +14,57 @@ export class UIScene extends Phaser.Scene {
 
   create() {
     // Controles
-    this.add.text(4, 4, 'WASD · E interagir', {
-      fontFamily: 'Courier New',
-      fontSize: '7px',
-      color: '#cccccc',
-      backgroundColor: '#00000099',
-      padding: { x: 4, y: 2 }
+    this.add.text(4, 3, 'WASD · E interagir', {
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '10px',
+      color: '#e0e0e0',
+      stroke: '#000000',
+      strokeThickness: 3,
+      backgroundColor: '#000000cc',
+      padding: { x: 5, y: 3 }
     }).setDepth(DEPTH.UI).setScrollFactor(0);
 
     // Versão
-    this.add.text(316, 4, 'v1.1', {
-      fontFamily: 'Courier New',
-      fontSize: '6px',
-      color: '#555555'
+    this.add.text(316, 3, 'v1.2', {
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '9px',
+      color: '#888888',
+      stroke: '#000000',
+      strokeThickness: 2
     }).setOrigin(1, 0).setDepth(DEPTH.UI).setScrollFactor(0);
 
     // Painel de missão
-    this.questTitle = this.add.text(4, 20, '', {
-      fontFamily: 'Courier New',
-      fontSize: '8px',
-      color: '#e8b86d',
-      backgroundColor: '#000000aa',
-      padding: { x: 4, y: 2 }
+    this.questTitle = this.add.text(4, 22, '', {
+      fontFamily: 'Arial, "Microsoft YaHei", sans-serif',
+      fontSize: '11px',
+      color: '#f0d080',
+      fontStyle: 'bold',
+      stroke: '#1a1208',
+      strokeThickness: 3,
+      backgroundColor: '#000000dd',
+      padding: { x: 5, y: 3 }
     }).setDepth(DEPTH.UI).setScrollFactor(0);
 
-    this.questSteps = this.add.text(4, 34, '', {
-      fontFamily: 'Courier New',
-      fontSize: '7px',
-      color: '#aaaaaa',
-      backgroundColor: '#00000088',
-      padding: { x: 4, y: 2 },
-      lineSpacing: 2
+    this.questSteps = this.add.text(4, 40, '', {
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '10px',
+      color: '#dddddd',
+      stroke: '#000000',
+      strokeThickness: 2,
+      backgroundColor: '#000000bb',
+      padding: { x: 5, y: 3 },
+      lineSpacing: 3
     }).setDepth(DEPTH.UI).setScrollFactor(0);
 
-    // Inventário resumido
-    this.invText = this.add.text(4, 160, '', {
-      fontFamily: 'Courier New',
-      fontSize: '7px',
-      color: '#88cc88',
-      backgroundColor: '#00000088',
-      padding: { x: 4, y: 2 }
+    // Inventário
+    this.invText = this.add.text(4, 158, '', {
+      fontFamily: 'Arial, "Microsoft YaHei", sans-serif',
+      fontSize: '10px',
+      color: '#90ee90',
+      stroke: '#003300',
+      strokeThickness: 2,
+      backgroundColor: '#000000bb',
+      padding: { x: 5, y: 3 }
     }).setDepth(DEPTH.UI).setScrollFactor(0);
 
     this.refreshQuest();
@@ -70,8 +81,8 @@ export class UIScene extends Phaser.Scene {
     if (active.length === 0) {
       const completed = quests.getQuest('first_meeting');
       if (completed && completed.status === 'completed') {
-        this.questTitle.setText('✓ Missão concluída!');
-        this.questSteps.setText('Fale com todos os habitantes.');
+        this.questTitle.setText('✓ 任务完成！ Missão concluída');
+        this.questSteps.setText('Fale com todos os habitantes da ilha.');
       } else {
         this.questTitle.setText('');
         this.questSteps.setText('');
@@ -80,7 +91,7 @@ export class UIScene extends Phaser.Scene {
     }
 
     const q = active[0];
-    this.questTitle.setText(`任务 ${q.titleZh || q.title}`);
+    this.questTitle.setText(`任务  ${q.titleZh || q.title}`);
     const lines = q.steps.map(s => (s.done ? '✓ ' : '○ ') + s.text);
     this.questSteps.setText(lines.join('\n'));
   }
@@ -91,7 +102,7 @@ export class UIScene extends Phaser.Scene {
       this.invText.setText('');
       return;
     }
-    const str = items.map(i => `${i.nameZh || i.name} x${i.qty}`).join(' · ');
-    this.invText.setText('背包: ' + str);
+    const str = items.map(i => `${i.nameZh || i.name} ×${i.qty}`).join('  ·  ');
+    this.invText.setText('背包  ' + str);
   }
 }

@@ -1,5 +1,5 @@
 /**
- * MenuScene — Menu principal (versão 1.0).
+ * MenuScene — Menu principal legível (v1.2)
  */
 
 export class MenuScene extends Phaser.Scene {
@@ -12,33 +12,40 @@ export class MenuScene extends Phaser.Scene {
 
     this.add.rectangle(width / 2, height / 2, width, height, 0x1a1a2e);
 
-    // Título
-    this.add.text(width / 2, 36, 'MANDARIN ODYSSEY', {
-      fontFamily: 'Courier New',
-      fontSize: '16px',
-      color: '#e8b86d',
-      align: 'center'
+    // Título principal
+    this.add.text(width / 2, 32, 'MANDARIN ODYSSEY', {
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '18px',
+      color: '#f0d080',
+      fontStyle: 'bold',
+      stroke: '#1a1208',
+      strokeThickness: 4
     }).setOrigin(0.5);
 
-    this.add.text(width / 2, 54, '学中文 · RPG de Exploração', {
-      fontFamily: 'Courier New',
-      fontSize: '8px',
-      color: '#a0a0a0',
-      align: 'center'
+    this.add.text(width / 2, 52, '学中文  ·  RPG de Exploração', {
+      fontFamily: 'Arial, "Microsoft YaHei", sans-serif',
+      fontSize: '11px',
+      color: '#c0c0c0',
+      stroke: '#000000',
+      strokeThickness: 2
     }).setOrigin(0.5);
 
-    // Botão usando asset
+    // Botão
     const btn = this.add.image(width / 2, 100, 'button')
-      .setInteractive({ useHandCursor: true });
+      .setInteractive({ useHandCursor: true })
+      .setScale(1.1);
 
     const txt = this.add.text(width / 2, 100, 'NOVO JOGO', {
-      fontFamily: 'Courier New',
-      fontSize: '10px',
-      color: '#ffffff'
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '13px',
+      color: '#ffffff',
+      fontStyle: 'bold',
+      stroke: '#000000',
+      strokeThickness: 3
     }).setOrigin(0.5);
 
     btn.on('pointerover', () => {
-      btn.setTint(0x88bbff);
+      btn.setTint(0xaaddff);
       txt.setColor('#ffffaa');
     });
     btn.on('pointerout', () => {
@@ -47,16 +54,20 @@ export class MenuScene extends Phaser.Scene {
     });
     btn.on('pointerdown', () => this.startGame());
 
-    this.add.text(width / 2, height - 28, 'WASD / Setas  ·  E para interagir', {
-      fontFamily: 'Courier New',
-      fontSize: '7px',
-      color: '#666666'
+    this.add.text(width / 2, height - 30, 'WASD / Setas   ·   E para interagir', {
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '10px',
+      color: '#888888',
+      stroke: '#000000',
+      strokeThickness: 2
     }).setOrigin(0.5);
 
-    this.add.text(width / 2, height - 14, 'v1.1', {
-      fontFamily: 'Courier New',
-      fontSize: '6px',
-      color: '#444444'
+    this.add.text(width / 2, height - 14, 'v1.2  ·  Ilha do Despertar', {
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '9px',
+      color: '#666666',
+      stroke: '#000000',
+      strokeThickness: 2
     }).setOrigin(0.5);
 
     this.input.keyboard.once('keydown-ENTER', () => this.startGame());

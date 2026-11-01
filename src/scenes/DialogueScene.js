@@ -1,11 +1,11 @@
 /**
- * DialogueScene — Interface de diálogo + integração com quests (v1.1).
+ * DialogueScene — Interface de diálogo legível (v1.2)
+ * Prioridade: Hanzi grande + contraste alto + layout limpo.
  */
 
 import { DEPTH } from '../config/gameConfig.js';
 import { quests } from '../systems/QuestSystem.js';
 import { inventory } from '../systems/InventorySystem.js';
-import { events } from '../systems/EventManager.js';
 
 const DIALOGUES = {
   merchant_greeting: {
@@ -15,9 +15,8 @@ const DIALOGUES = {
       { speaker: '老板', hanzi: '你想买东西吗？', pinyin: 'Nǐ xiǎng mǎi dōngxi ma?', pt: 'Você quer comprar algo?' },
       { speaker: '老板', hanzi: '给你一个红苹果。', pinyin: 'Gěi nǐ yīgè hóng píngguǒ.', pt: 'Tome uma maçã vermelha.' }
     ],
-    onComplete: (scene) => {
+    onComplete: () => {
       quests.completeStep('first_meeting', 'talk_merchant');
-      // presente do mercador
       if (!inventory.hasItem('red_apple')) {
         inventory.addItem({ id: 'red_apple', name: 'Maçã Vermelha', nameZh: '红苹果', qty: 1 });
       }
@@ -33,6 +32,15 @@ const DIALOGUES = {
       quests.completeStep('first_meeting', 'talk_scholar');
     }
   },
+  // Preparado para Sr. Chen (casa de chá) — próxima missão
+  chen_greeting: {
+    lines: [
+      { speaker: '陈先生', hanzi: '欢迎来到茶馆。', pinyin: 'Huānyíng lái dào cháguǎn.', pt: 'Bem-vindo à casa de chá.' },
+      { speaker: '陈先生', hanzi: '请坐，喝茶。', pinyin: 'Qǐng zuò, hē chá.', pt: 'Por favor, sente-se e beba chá.' },
+      { speaker: '陈先生', hanzi: '这是绿茶。', pinyin: 'Zhè shì lǜchá.', pt: 'Isto é chá verde.' }
+    ],
+    onComplete: null
+  },
   default: {
     lines: [
       { speaker: 'NPC', hanzi: '你好。', pinyin: 'Nǐ hǎo.', pt: 'Olá.' }
@@ -45,13 +53,12 @@ export class DialogueScene extends Phaser.Scene {
     super({ key: 'DialogueScene' });
     this.currentLine = 0;
     this.lines = [];
-    this.dialogueKey = 'default';
     this.onComplete = null;
   }
 
   init(data) {
-    this.dialogueKey = data.dialogueKey || 'default';
-    const def = DIALOGUES[this.dialogueKey] || DIALOGUES.default;
+    const key = data.dialogueKey || 'default';
+    const def = DIALOGUES[key] || DIALOGUES.default;
     this.lines = def.lines;
     this.onComplete = def.onComplete || null;
     this.currentLine = 0;
@@ -60,33 +67,64 @@ export class DialogueScene extends Phaser.Scene {
   create() {
     const { width, height } = this.cameras.main;
 
-    this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.45)
+    // Overlay escuro
+    this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.55)
       .setDepth(DEPTH.DIALOGUE)
       .setScrollFactor(0);
 
-    this.add.image(width / 2, height - 36, 'dialogue_box')
+    // Caixa de diálogo (mais alta)
+    const boxY = height - 42;
+    this.add.image(width / 2, boxY, 'dialogue_box')
       .setDepth(DEPTH.DIALOGUE + 1)
       .setScrollFactor(0);
 
-    this.nameText = this.add.text(14, height - 66, '', {
-      fontFamily: 'Courier New', fontSize: '9px', color: '#e8b86d'
+    // === TEXTOS COM ALTA LEGIBILIDADE ===
+    // Nome do falante (dourado + stroke)
+    this.nameText = this.add.text(12, height - 78, '', {
+      fontFamily: 'Arial, "Microsoft YaHei", sans-serif',
+      fontSize: '13px',
+      color: '#f0d080',
+      fontStyle: 'bold',
+      stroke: '#1a1208',
+      strokeThickness: 3
     }).setDepth(DEPTH.DIALOGUE + 2).setScrollFactor(0);
 
-    this.hanziText = this.add.text(14, height - 52, '', {
-      fontFamily: 'Courier New', fontSize: '11px', color: '#ffffff',
-      wordWrap: { width: width - 32 }
+    // Hanzi (o mais importante — grande e claro)
+    this.hanziText = this.add.text(12, height - 60, '', {
+      fontFamily: 'Arial, "Microsoft YaHei", "Noto Sans SC", sans-serif',
+      fontSize: '16px',
+      color: '#ffffff',
+      fontStyle: 'bold',
+      stroke: '#000000',
+      strokeThickness: 4,
+      wordWrap: { width: width - 28 }
     }).setDepth(DEPTH.DIALOGUE + 2).setScrollFactor(0);
 
-    this.pinyinText = this.add.text(14, height - 36, '', {
-      fontFamily: 'Courier New', fontSize: '8px', color: '#a0c4e8'
+    // Pinyin
+    this.pinyinText = this.add.text(12, height - 38, '', {
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '12px',
+      color: '#a8d4f0',
+      stroke: '#0a1520',
+      strokeThickness: 3
     }).setDepth(DEPTH.DIALOGUE + 2).setScrollFactor(0);
 
-    this.ptText = this.add.text(14, height - 22, '', {
-      fontFamily: 'Courier New', fontSize: '8px', color: '#999999'
+    // Tradução PT
+    this.ptText = this.add.text(12, height - 20, '', {
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '11px',
+      color: '#c8c8c8',
+      stroke: '#111111',
+      strokeThickness: 2
     }).setDepth(DEPTH.DIALOGUE + 2).setScrollFactor(0);
 
-    this.add.text(width - 14, height - 8, 'E / Espaço', {
-      fontFamily: 'Courier New', fontSize: '7px', color: '#666666'
+    // Indicador de avanço
+    this.add.text(width - 10, height - 8, 'E / Espaço ▶', {
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '10px',
+      color: '#e8b86d',
+      stroke: '#000000',
+      strokeThickness: 2
     }).setOrigin(1, 1).setDepth(DEPTH.DIALOGUE + 2).setScrollFactor(0);
 
     this.showLine(0);
@@ -115,7 +153,7 @@ export class DialogueScene extends Phaser.Scene {
 
   finishDialogue() {
     if (typeof this.onComplete === 'function') {
-      this.onComplete(this);
+      this.onComplete();
     }
     this.closeDialogue();
   }
