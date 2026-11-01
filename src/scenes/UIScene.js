@@ -1,5 +1,5 @@
 /**
- * UIScene — HUD legível (v1.3)
+ * UIScene — HUD legível (v1.4)
  */
 
 import { DEPTH } from '../config/gameConfig.js';
@@ -25,7 +25,7 @@ export class UIScene extends Phaser.Scene {
     }).setDepth(DEPTH.UI).setScrollFactor(0);
 
     // Versão
-    this.add.text(316, 3, 'v1.3', {
+    this.add.text(316, 3, 'v1.4', {
       fontFamily: 'Arial, sans-serif',
       fontSize: '9px',
       color: '#888888',

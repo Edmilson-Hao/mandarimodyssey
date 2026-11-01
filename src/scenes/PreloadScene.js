@@ -1,5 +1,5 @@
 /**
- * PreloadScene — Assets completos v1.3 (mapa real + tileset expandido)
+ * PreloadScene — Assets prioritários v1.4 (inspirados nas imagens-conceito)
  */
 
 export class PreloadScene extends Phaser.Scene {
@@ -33,25 +33,26 @@ export class PreloadScene extends Phaser.Scene {
       progressBar.destroy(); progressBox.destroy(); loadingText.destroy();
     });
 
-    // Sprites
+    // Sprites — prioritários
     this.load.spritesheet('player', 'assets/sprites/player.png', { frameWidth:32, frameHeight:48 });
     this.load.spritesheet('npc_merchant', 'assets/sprites/npc_merchant.png', { frameWidth:32, frameHeight:48 });
-    this.load.spritesheet('npc_scholar', 'assets/sprites/npc_scholar.png', { frameWidth:32, frameHeight:48 });
+    this.load.spritesheet('npc_chen', 'assets/sprites/npc_chen.png', { frameWidth:32, frameHeight:48 });
+    this.load.spritesheet('npc_scholar', 'assets/sprites/npc_scholar.png', { frameWidth:32, frameHeight:48 }); // alias
 
     // Tiles
     const tiles = [
       'tile_grass_01','tile_grass_02','tile_grass_03',
       'tile_path_01','tile_path_02','tile_water_01','tile_water_02',
       'tile_dirt','tile_sand','tile_stone',
-      'tile_wall_wood','tile_wall_plaster','tile_roof','tile_roof_edge',
+      'tile_wall_wood','tile_wall_plaster','tile_roof','tile_roof_edge','tile_roof_thatch',
       'tile_door','tile_window',
       'tile_tree_top','tile_tree_trunk','tile_bush','tile_flower','tile_rock',
-      'tile_wall' // fallback
+      'tile_dock','tile_wall'
     ];
     tiles.forEach(t => this.load.image(t, `assets/tiles/${t}.png`));
 
     // Props
-    ['prop_lantern','prop_barrel','prop_crate','prop_table','prop_fence'].forEach(p => {
+    ['prop_lantern','prop_barrel','prop_crate','prop_table','prop_fence','prop_well'].forEach(p => {
       this.load.image(p, `assets/props/${p}.png`);
     });
 
@@ -68,7 +69,7 @@ export class PreloadScene extends Phaser.Scene {
 
   createAnimations() {
     const dirs = ['down','left','right','up'];
-    ['player','npc_merchant','npc_scholar'].forEach(char => {
+    ['player','npc_merchant','npc_chen','npc_scholar'].forEach(char => {
       dirs.forEach((dir, row) => {
         this.anims.create({
           key: `${char}_idle_${dir}`,

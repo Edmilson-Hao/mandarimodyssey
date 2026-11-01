@@ -1,6 +1,6 @@
 /**
- * WorldScene — Ilha do Despertar (v1.3)
- * Mapa real com vila, caminhos, casa de chá e cais.
+ * WorldScene — Ilha do Despertar (v1.4)
+ * Assets prioritários inspirados nas imagens-conceito.
  */
 
 import { Player } from '../entities/Player.js';
@@ -24,7 +24,7 @@ const NPC_DEFS = [
   {
     id: 'scholar_01',
     name: '先生 (Xiān Sheng)',
-    texture: 'npc_scholar',
+    texture: 'npc_chen',
     x: 23 * 16 + 8,
     y: 8 * 16 + 8,
     facing: 'left',
@@ -33,7 +33,7 @@ const NPC_DEFS = [
   {
     id: 'chen_01',
     name: '陈先生 (Chén Xiānsheng)',
-    texture: 'npc_scholar',
+    texture: 'npc_chen',
     x: 23 * 16 + 8,
     y: 22 * 16 + 8,
     facing: 'down',
