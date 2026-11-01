@@ -1,0 +1,76 @@
+{
+  "zones": [
+    {
+      "id": "zone_initial_village",
+      "regionId": "region_dawn_island",
+      "name": {
+        "pt": "Vila Inicial",
+        "zh": "初始村",
+        "pinyin": "Chūshǐ cūn"
+      },
+      "function": "Introdução ao universo, primeiros NPCs, cumprimentos e apresentações",
+      "locations": [
+        "loc_village_square",
+        "loc_tea_house",
+        "loc_well",
+        "loc_chen_residence"
+      ],
+      "npcs": ["npc_chen", "npc_mei"],
+      "vocabularyFocus": ["你好", "我叫", "你呢", "茶", "谢谢", "再见", "先生", "朋友"],
+      "unlockConditions": [],
+      "connections": [
+        { "to": "zone_market", "direction": "east" },
+        { "to": "zone_academy", "direction": "north" }
+      ]
+    },
+    {
+      "id": "zone_market",
+      "regionId": "region_dawn_island",
+      "name": {
+        "pt": "Mercado da Ilha",
+        "zh": "市场",
+        "pinyin": "Shìchǎng"
+      },
+      "function": "Interações comerciais, objetos, números, cores e pedidos",
+      "locations": [
+        "loc_fruit_stall",
+        "loc_tea_stall",
+        "loc_tools_shop",
+        "loc_food_plaza"
+      ],
+      "npcs": ["npc_laoban"],
+      "vocabularyFocus": ["苹果", "多少钱", "一", "二", "三", "红色", "要", "买", "这个"],
+      "unlockConditions": [
+        { "type": "quest_completed", "questId": "quest_first_meeting" }
+      ],
+      "connections": [
+        { "to": "zone_initial_village", "direction": "west" }
+      ]
+    },
+    {
+      "id": "zone_academy",
+      "regionId": "region_dawn_island",
+      "name": {
+        "pt": "Academia do Conhecimento",
+        "zh": "知识书院",
+        "pinyin": "Zhīshì shūyuàn"
+      },
+      "function": "Leitura, Hanzi, estudo e revisão contextualizada",
+      "locations": [
+        "loc_library",
+        "loc_study_courtyard",
+        "loc_master_room",
+        "loc_archive"
+      ],
+      "npcs": ["npc_master_wen", "npc_xiaoyu"],
+      "vocabularyFocus": ["书", "读", "写", "字", "学", "老师", "学生", "问题", "回答"],
+      "unlockConditions": [
+        { "type": "quest_completed", "questId": "quest_first_purchase" },
+        { "type": "vocabulary_count", "min": 15 }
+      ],
+      "connections": [
+        { "to": "zone_initial_village", "direction": "south" }
+      ]
+    }
+  ]
+}

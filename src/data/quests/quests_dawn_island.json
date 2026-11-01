@@ -1,0 +1,240 @@
+{
+  "quests": [
+    {
+      "id": "quest_first_meeting",
+      "name": {
+        "pt": "Primeiro Encontro",
+        "zh": "第一次见面",
+        "pinyin": "Dì yī cì jiànmiàn"
+      },
+      "category": "main",
+      "regionId": "region_dawn_island",
+      "zoneId": "zone_initial_village",
+      "npcId": "npc_chen",
+      "narrative": {
+        "context": "O jogador acaba de chegar à Ilha do Despertar e precisa conhecer o Sr. Chen, o guardião local.",
+        "introduction": "Alguém na vila menciona que o Sr. Chen gosta de receber viajantes na casa de chá.",
+        "problem": "Você ainda não se apresentou formalmente a ninguém importante.",
+        "objective": "Visitar a Casa de Chá e conversar com o Sr. Chen.",
+        "conclusion": "Sr. Chen oferece chá de boas-vindas e incentiva o jogador a explorar o mercado."
+      },
+      "gameplay": {
+        "mainObjectives": [
+          "Falar com qualquer NPC da Vila Inicial",
+          "Ir até a Casa de Chá",
+          "Conversar com Sr. Chen"
+        ],
+        "optionalObjectives": [
+          "Explorar o poço da vila",
+          "Cumprimentar Mei"
+        ],
+        "steps": [
+          { "id": "step_talk_villager", "text": "Falar com um morador da vila", "done": false },
+          { "id": "step_go_tea_house", "text": "Encontrar a Casa de Chá", "done": false },
+          { "id": "step_talk_chen", "text": "Conversar com 陈先生", "done": false }
+        ],
+        "successConditions": ["all_steps_done"],
+        "failureConditions": []
+      },
+      "pedagogy": {
+        "languageGoal": "Cumprimentos e autoapresentação",
+        "vocabulary": ["你好", "先生", "茶", "请", "谢谢", "我叫", "你呢"],
+        "newWordsAllowed": ["你好", "先生", "茶", "请", "谢谢"],
+        "structures": ["你好！", "我叫...", "你呢？", "谢谢！"],
+        "skill": "speaking_listening",
+        "difficulty": 1,
+        "exposureStrategy": "repetition in natural greeting context"
+      },
+      "rewards": {
+        "xp": 50,
+        "items": ["item_welcome_tea"],
+        "unlocks": ["zone_market"],
+        "narrativeProgress": "met_chen"
+      },
+      "implementation": {
+        "trigger": "player_enters_village",
+        "states": ["inactive", "active", "completed"],
+        "dependencies": [],
+        "completionEvent": "quest_first_meeting_completed"
+      }
+    },
+    {
+      "id": "quest_first_purchase",
+      "name": {
+        "pt": "Primeira Compra",
+        "zh": "第一次买东西",
+        "pinyin": "Dì yī cì mǎi dōngxi"
+      },
+      "category": "main",
+      "regionId": "region_dawn_island",
+      "zoneId": "zone_market",
+      "npcId": "npc_laoban",
+      "narrative": {
+        "context": "Sr. Chen sugeriu que o jogador visite o mercado e experimente comprar algo.",
+        "introduction": "Lao Ban chama o jogador para ver as frutas frescas.",
+        "problem": "Você precisa de uma maçã, mas ainda não sabe como pedir e pagar.",
+        "objective": "Comprar uma maçã vermelha usando números e cores.",
+        "conclusion": "Lao Ban entrega a maçã e elogia a coragem do jogador de tentar falar."
+      },
+      "gameplay": {
+        "mainObjectives": [
+          "Ir ao Mercado",
+          "Falar com Lao Ban",
+          "Pedir uma maçã (vermelho + número)"
+        ],
+        "steps": [
+          { "id": "step_enter_market", "text": "Entrar no Mercado", "done": false },
+          { "id": "step_talk_laoban", "text": "Falar com 老板", "done": false },
+          { "id": "step_buy_apple", "text": "Comprar 红苹果", "done": false }
+        ],
+        "successConditions": ["all_steps_done"]
+      },
+      "pedagogy": {
+        "languageGoal": "Números, cores e pedido de compra",
+        "vocabulary": ["苹果", "红色", "多少钱", "一", "二", "三", "要", "买", "这个"],
+        "newWordsAllowed": ["苹果", "红色", "多少钱", "要"],
+        "structures": ["这个多少钱？", "我要一个。", "红色的。"],
+        "skill": "transactional_speaking",
+        "difficulty": 1
+      },
+      "rewards": {
+        "xp": 80,
+        "items": ["item_red_apple"],
+        "unlocks": ["zone_academy_partial"],
+        "narrativeProgress": "first_purchase_done"
+      },
+      "implementation": {
+        "trigger": "quest_first_meeting_completed",
+        "dependencies": ["quest_first_meeting"],
+        "completionEvent": "quest_first_purchase_completed"
+      }
+    },
+    {
+      "id": "quest_first_lesson",
+      "name": {
+        "pt": "Primeira Lição",
+        "zh": "第一课",
+        "pinyin": "Dì yī kè"
+      },
+      "category": "main",
+      "regionId": "region_dawn_island",
+      "zoneId": "zone_academy",
+      "npcId": "npc_master_wen",
+      "narrative": {
+        "context": "O jogador já conhece a vila e o mercado. Agora é hora de aprender de forma mais estruturada.",
+        "introduction": "Mestre Wen aceita o jogador como novo estudante.",
+        "objective": "Participar da primeira aula e aprender a reconhecer alguns Hanzi básicos.",
+        "conclusion": "Mestre Wen entrega o Caderno do Estudante e diz que o jogador está pronto para o próximo passo da jornada."
+      },
+      "gameplay": {
+        "mainObjectives": [
+          "Entrar na Academia",
+          "Falar com Mestre Wen",
+          "Completar a interação de estudo"
+        ],
+        "steps": [
+          { "id": "step_enter_academy", "text": "Entrar na Academia", "done": false },
+          { "id": "step_talk_wen", "text": "Falar com 文老师", "done": false },
+          { "id": "step_study", "text": "Participar da lição", "done": false }
+        ]
+      },
+      "pedagogy": {
+        "languageGoal": "Vocabulário de estudo e reconhecimento de Hanzi",
+        "vocabulary": ["书", "读", "写", "字", "学", "老师", "学生", "请", "懂"],
+        "newWordsAllowed": ["书", "读", "字", "老师", "学生"],
+        "structures": ["老师好！", "我是学生。", "请读。", "我懂了。"],
+        "skill": "reading_recognition",
+        "difficulty": 2
+      },
+      "rewards": {
+        "xp": 100,
+        "items": ["item_student_notebook"],
+        "unlocks": ["quest_island_complete"],
+        "narrativeProgress": "academy_accepted"
+      },
+      "implementation": {
+        "trigger": "quest_first_purchase_completed",
+        "dependencies": ["quest_first_purchase"],
+        "completionEvent": "quest_first_lesson_completed"
+      }
+    },
+    {
+      "id": "quest_help_mei",
+      "name": {
+        "pt": "Ajudar Mei",
+        "zh": "帮助美",
+        "pinyin": "Bāngzhù Měi"
+      },
+      "category": "side",
+      "regionId": "region_dawn_island",
+      "zoneId": "zone_initial_village",
+      "npcId": "npc_mei",
+      "narrative": {
+        "context": "Mei perdeu algo pequeno e pede ajuda ao jogador.",
+        "objective": "Encontrar o item e devolver a Mei.",
+        "conclusion": "Mei agradece e se torna mais aberta a conversar."
+      },
+      "gameplay": {
+        "mainObjectives": ["Falar com Mei", "Encontrar o item", "Devolver"],
+        "steps": [
+          { "id": "step_talk_mei", "text": "Falar com 美", "done": false },
+          { "id": "step_find_item", "text": "Encontrar o objeto", "done": false },
+          { "id": "step_return", "text": "Devolver a Mei", "done": false }
+        ]
+      },
+      "pedagogy": {
+        "languageGoal": "Pedidos de ajuda e agradecimentos",
+        "vocabulary": ["帮", "找", "这个", "谢谢", "不客气"],
+        "newWordsAllowed": ["帮", "找"],
+        "difficulty": 1
+      },
+      "rewards": {
+        "xp": 30,
+        "items": [],
+        "unlocks": [],
+        "narrativeProgress": "friend_mei"
+      },
+      "implementation": {
+        "trigger": "talk_to_mei_after_first_meeting",
+        "dependencies": ["quest_first_meeting"]
+      }
+    },
+    {
+      "id": "quest_make_friend",
+      "name": {
+        "pt": "Fazer um Amigo",
+        "zh": "交个朋友",
+        "pinyin": "Jiāo ge péngyou"
+      },
+      "category": "side",
+      "regionId": "region_dawn_island",
+      "zoneId": "zone_academy",
+      "npcId": "npc_xiaoyu",
+      "narrative": {
+        "context": "Xiao Yu quer fazer amigos novos.",
+        "objective": "Conversar várias vezes com Xiao Yu e tornar-se amigo.",
+        "conclusion": "Xiao Yu considera o jogador um amigo."
+      },
+      "gameplay": {
+        "mainObjectives": ["Conversar com Xiao Yu pelo menos 3 vezes"],
+        "steps": [
+          { "id": "step_talk1", "text": "Primeira conversa", "done": false },
+          { "id": "step_talk2", "text": "Segunda conversa", "done": false },
+          { "id": "step_talk3", "text": "Terceira conversa", "done": false }
+        ]
+      },
+      "pedagogy": {
+        "languageGoal": "Amizade e vocabulário social",
+        "vocabulary": ["朋友", "一起", "玩", "喜欢", "好"],
+        "difficulty": 1
+      },
+      "rewards": {
+        "xp": 40,
+        "narrativeProgress": "friend_xiaoyu"
+      },
+      "implementation": {
+        "dependencies": ["quest_first_purchase"]
+      }
+    }
+  ]
+}

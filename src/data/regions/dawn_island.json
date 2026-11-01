@@ -1,0 +1,28 @@
+{
+  "id": "region_dawn_island",
+  "name": {
+    "pt": "Ilha do Despertar",
+    "zh": "初来岛",
+    "pinyin": "Chū lái dǎo"
+  },
+  "description": "A primeira ilha. Aqui o jogador aprende o básico de cumprimentos, objetos do dia a dia e começa sua jornada.",
+  "hskFocus": 1,
+  "access": {
+    "type": "start",
+    "conditions": []
+  },
+  "zones": [
+    "zone_initial_village",
+    "zone_market",
+    "zone_academy"
+  ],
+  "connections": [
+    {
+      "to": "region_lantern_city",
+      "type": "boat",
+      "unlockQuest": "quest_island_complete"
+    }
+  ],
+  "visualIdentity": "coastal village, wooden houses, thatch and red tile roofs, docks, lighthouse",
+  "climate": "mild, sunny"
+}

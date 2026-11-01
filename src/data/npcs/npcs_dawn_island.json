@@ -1,0 +1,177 @@
+{
+  "npcs": [
+    {
+      "id": "npc_chen",
+      "name": {
+        "pt": "Sr. Chen",
+        "zh": "陈先生",
+        "pinyin": "Chén xiānsheng"
+      },
+      "age": 68,
+      "role": "tea_house_owner",
+      "location": "loc_tea_house",
+      "zoneId": "zone_initial_village",
+      "texture": "npc_chen",
+      "personality": ["patient", "wise", "gently ironic", "loves stories"],
+      "appearance": "Long white hair and beard, round glasses, dark blue and white traditional robes",
+      "likes": ["jasmine tea", "calligraphy", "listening to young people"],
+      "dislikes": ["haste", "disrespect", "cold tea"],
+      "background": "Lived his whole life on the island. Former teacher at the Academy, now runs the tea house and guards local stories.",
+      "schedule": [
+        { "time": "morning", "location": "loc_tea_house", "activity": "preparing tea" },
+        { "time": "afternoon", "location": "loc_village_square", "activity": "talking with villagers" },
+        { "time": "evening", "location": "loc_chen_residence", "activity": "reading" }
+      ],
+      "dialogueProfile": {
+        "formality": "polite_formal",
+        "sentenceLength": "short_clear",
+        "favoriteTopics": ["tea", "old stories", "learning", "the island"],
+        "avoidTopics": ["politics", "rushed business"],
+        "speechStyle": "metaphors involving tea and patience"
+      },
+      "knowledgeScope": ["island_history", "tea", "basic_greetings", "academy_past"],
+      "quests": ["quest_first_meeting", "quest_tea_invitation"],
+      "offers": ["item_welcome_tea"],
+      "unlockConditions": []
+    },
+    {
+      "id": "npc_laoban",
+      "name": {
+        "pt": "Lao Ban",
+        "zh": "老板",
+        "pinyin": "Lǎobǎn"
+      },
+      "age": 42,
+      "role": "merchant",
+      "location": "loc_fruit_stall",
+      "zoneId": "zone_market",
+      "texture": "npc_merchant",
+      "personality": ["outgoing", "talkative", "fair bargainer"],
+      "appearance": "Straw hat, orange-brown robe, golden sash",
+      "likes": ["good sales", "lively conversation", "red apples"],
+      "dislikes": ["customers who don't greet", "rude bargaining"],
+      "background": "Runs the main fruit and goods stall in the island market. Knows everyone.",
+      "schedule": [
+        { "time": "morning", "location": "loc_fruit_stall", "activity": "opening stall" },
+        { "time": "day", "location": "loc_fruit_stall", "activity": "selling" },
+        { "time": "evening", "location": "loc_fruit_stall", "activity": "closing" }
+      ],
+      "dialogueProfile": {
+        "formality": "friendly_informal",
+        "sentenceLength": "medium",
+        "favoriteTopics": ["prices", "fruit", "customers", "weather"],
+        "avoidTopics": ["academy studies"],
+        "speechStyle": "enthusiastic, uses numbers and colors often"
+      },
+      "knowledgeScope": ["market_prices", "fruits", "numbers", "colors"],
+      "quests": ["quest_first_purchase"],
+      "offers": ["item_red_apple"],
+      "unlockConditions": [
+        { "type": "quest_completed", "questId": "quest_first_meeting" }
+      ]
+    },
+    {
+      "id": "npc_mei",
+      "name": {
+        "pt": "Mei",
+        "zh": "美",
+        "pinyin": "Měi"
+      },
+      "age": 28,
+      "role": "villager",
+      "location": "loc_village_square",
+      "zoneId": "zone_initial_village",
+      "texture": "npc_merchant",
+      "personality": ["gentle", "curious", "slightly shy at first"],
+      "appearance": "Simple village clothes, friendly smile",
+      "likes": ["helping others", "flowers", "quiet mornings"],
+      "dislikes": ["loud arguments"],
+      "background": "Helps at the tea house sometimes. Lives in the village.",
+      "schedule": [
+        { "time": "morning", "location": "loc_village_square", "activity": "greeting neighbors" },
+        { "time": "afternoon", "location": "loc_tea_house", "activity": "helping Chen" }
+      ],
+      "dialogueProfile": {
+        "formality": "polite_informal",
+        "sentenceLength": "short",
+        "favoriteTopics": ["family", "daily life", "the village"],
+        "avoidTopics": ["complex philosophy"],
+        "speechStyle": "warm, asks questions back (你呢？)"
+      },
+      "knowledgeScope": ["village_life", "greetings", "family_words"],
+      "quests": ["quest_help_mei"],
+      "offers": [],
+      "unlockConditions": []
+    },
+    {
+      "id": "npc_master_wen",
+      "name": {
+        "pt": "Mestre Wen",
+        "zh": "文老师",
+        "pinyin": "Wén lǎoshī"
+      },
+      "age": 55,
+      "role": "teacher",
+      "location": "loc_master_room",
+      "zoneId": "zone_academy",
+      "texture": "npc_chen",
+      "personality": ["serious", "demanding", "fair", "encouraging"],
+      "appearance": "Scholar robes, neat appearance, calm expression",
+      "likes": ["discipline", "correct writing", "curious students"],
+      "dislikes": ["laziness", "disrespect to books"],
+      "background": "Current head teacher of the Academy. Former colleague of Sr. Chen.",
+      "schedule": [
+        { "time": "morning", "location": "loc_study_courtyard", "activity": "teaching" },
+        { "time": "afternoon", "location": "loc_library", "activity": "reading" }
+      ],
+      "dialogueProfile": {
+        "formality": "formal",
+        "sentenceLength": "clear_structured",
+        "favoriteTopics": ["study", "characters", "books", "effort"],
+        "avoidTopics": ["market gossip"],
+        "speechStyle": "teacher-like, uses 请 and clear instructions"
+      },
+      "knowledgeScope": ["hanzi", "reading", "academy_rules", "teaching"],
+      "quests": ["quest_first_lesson"],
+      "offers": ["item_student_notebook"],
+      "unlockConditions": [
+        { "type": "quest_completed", "questId": "quest_first_purchase" }
+      ]
+    },
+    {
+      "id": "npc_xiaoyu",
+      "name": {
+        "pt": "Xiao Yu",
+        "zh": "小雨",
+        "pinyin": "Xiǎo Yǔ"
+      },
+      "age": 16,
+      "role": "student",
+      "location": "loc_study_courtyard",
+      "zoneId": "zone_academy",
+      "texture": "npc_merchant",
+      "personality": ["lively", "friendly", "speaks a bit fast"],
+      "appearance": "Simple student clothes, energetic posture",
+      "likes": ["making friends", "stories", "exploring"],
+      "dislikes": ["being alone for too long"],
+      "background": "Young student at the Academy. Sometimes visits the village.",
+      "schedule": [
+        { "time": "morning", "location": "loc_study_courtyard", "activity": "studying" },
+        { "time": "afternoon", "location": "loc_village_square", "activity": "playing" }
+      ],
+      "dialogueProfile": {
+        "formality": "informal",
+        "sentenceLength": "medium_fast",
+        "favoriteTopics": ["friends", "school", "fun", "the island"],
+        "avoidTopics": ["serious philosophy"],
+        "speechStyle": "enthusiastic, peer-to-peer"
+      },
+      "knowledgeScope": ["school_life", "friendship", "basic_study_words"],
+      "quests": ["quest_make_friend"],
+      "offers": [],
+      "unlockConditions": [
+        { "type": "quest_completed", "questId": "quest_first_purchase" }
+      ]
+    }
+  ]
+}

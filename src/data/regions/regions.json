@@ -1,44 +1,50 @@
 {
   "regions": [
     {
-      "id": "awakening_island",
+      "id": "region_dawn_island",
       "nameZh": "初来岛",
       "namePt": "Ilha do Despertar",
       "description": "A primeira ilha. Aqui o jogador aprende o básico de cumprimentos e objetos do dia a dia.",
       "hskFocus": 1,
-      "locations": ["vila_pescadores", "casa_cha", "cais", "farol"]
+      "locations": ["vila_inicial", "mercado", "academia"],
+      "zones": ["zone_initial_village", "zone_market", "zone_academy"],
+      "dataFile": "dawn_island.json"
     },
     {
-      "id": "lantern_city",
+      "id": "region_lantern_city",
       "nameZh": "灯笼城",
       "namePt": "Cidade das Lanternas",
       "description": "Mercado vibrante de lanternas, comida de rua e comércio.",
       "hskFocus": 1,
-      "locations": ["mercado", "loja_lanternas", "pracinha"]
+      "locations": ["mercado", "loja_lanternas", "pracinha"],
+      "status": "locked"
     },
     {
-      "id": "life_valley",
+      "id": "region_life_valley",
       "nameZh": "生活谷",
       "namePt": "Vale da Vida",
       "description": "Área residencial e de vida cotidiana — jardins, casas, canais.",
       "hskFocus": 2,
-      "locations": ["jardim", "casas", "ponte"]
+      "locations": ["jardim", "casas", "ponte"],
+      "status": "locked"
     },
     {
-      "id": "jade_mountains",
+      "id": "region_jade_mountains",
       "nameZh": "玉山",
       "namePt": "Montanhas de Jade",
       "description": "Região de treinamento marcial e templos.",
       "hskFocus": 2,
-      "locations": ["dojo", "templo", "trilha"]
+      "locations": ["dojo", "templo", "trilha"],
+      "status": "locked"
     },
     {
-      "id": "imperial_city",
+      "id": "region_imperial_city",
       "nameZh": "皇城",
       "namePt": "Cidade Imperial",
       "description": "Centro político e cultural avançado.",
       "hskFocus": 3,
-      "locations": ["palacio", "mercado_alto", "biblioteca"]
+      "locations": ["palacio", "mercado_alto", "biblioteca"],
+      "status": "locked"
     }
   ]
 }

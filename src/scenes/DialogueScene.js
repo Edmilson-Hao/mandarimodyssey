@@ -1,6 +1,6 @@
 /**
- * DialogueScene — Interface de diálogo legível (v1.2)
- * Prioridade: Hanzi grande + contraste alto + layout limpo.
+ * DialogueScene — Interface de diálogo legível (v1.5)
+ * Alinhado ao World Design da Ilha do Despertar.
  */
 
 import { DEPTH } from '../config/gameConfig.js';
@@ -13,12 +13,13 @@ const DIALOGUES = {
       { speaker: '老板', hanzi: '你好！欢迎！', pinyin: 'Nǐ hǎo! Huānyíng!', pt: 'Olá! Bem-vindo!' },
       { speaker: '老板', hanzi: '我是老板。', pinyin: 'Wǒ shì lǎobǎn.', pt: 'Eu sou o dono da loja.' },
       { speaker: '老板', hanzi: '你想买东西吗？', pinyin: 'Nǐ xiǎng mǎi dōngxi ma?', pt: 'Você quer comprar algo?' },
-      { speaker: '老板', hanzi: '给你一个红苹果。', pinyin: 'Gěi nǐ yīgè hóng píngguǒ.', pt: 'Tome uma maçã vermelha.' }
+      { speaker: '老板', hanzi: '这个苹果很好。', pinyin: 'Zhège píngguǒ hěn hǎo.', pt: 'Esta maçã é muito boa.' }
     ],
     onComplete: () => {
-      quests.completeStep('first_meeting', 'talk_merchant');
-      if (!inventory.hasItem('red_apple')) {
-        inventory.addItem({ id: 'red_apple', name: 'Maçã Vermelha', nameZh: '红苹果', qty: 1 });
+      quests.completeStep('quest_first_purchase', 'step_talk_laoban');
+      quests.completeStep('quest_first_purchase', 'step_buy_apple');
+      if (!inventory.hasItem('item_red_apple')) {
+        inventory.addItem({ id: 'item_red_apple', name: 'Maçã Vermelha', nameZh: '红苹果', qty: 1 });
       }
     }
   },
@@ -29,17 +30,24 @@ const DIALOGUES = {
       { speaker: '先生', hanzi: '慢慢来，加油！', pinyin: 'Màn man lái, jiāyóu!', pt: 'Vá com calma, força!' }
     ],
     onComplete: () => {
-      quests.completeStep('first_meeting', 'talk_scholar');
+      quests.completeStep('quest_first_meeting', 'step_talk_villager');
     }
   },
-  // Preparado para Sr. Chen (casa de chá) — próxima missão
   chen_greeting: {
     lines: [
       { speaker: '陈先生', hanzi: '欢迎来到茶馆。', pinyin: 'Huānyíng lái dào cháguǎn.', pt: 'Bem-vindo à casa de chá.' },
       { speaker: '陈先生', hanzi: '请坐，喝茶。', pinyin: 'Qǐng zuò, hē chá.', pt: 'Por favor, sente-se e beba chá.' },
-      { speaker: '陈先生', hanzi: '这是绿茶。', pinyin: 'Zhè shì lǜchá.', pt: 'Isto é chá verde.' }
+      { speaker: '陈先生', hanzi: '我叫陈先生。你呢？', pinyin: 'Wǒ jiào Chén xiānsheng. Nǐ ne?', pt: 'Eu me chamo Sr. Chen. E você?' },
+      { speaker: '陈先生', hanzi: '很好。这是欢迎茶。', pinyin: 'Hěn hǎo. Zhè shì huānyíng chá.', pt: 'Muito bem. Isto é o chá de boas-vindas.' }
     ],
-    onComplete: () => { quests.completeStep("first_meeting", "talk_chen"); }
+    onComplete: () => {
+      quests.completeStep('quest_first_meeting', 'step_talk_villager');
+      quests.completeStep('quest_first_meeting', 'step_go_tea_house');
+      quests.completeStep('quest_first_meeting', 'step_talk_chen');
+      if (!inventory.hasItem('item_welcome_tea')) {
+        inventory.addItem({ id: 'item_welcome_tea', name: 'Chá de Boas-Vindas', nameZh: '欢迎茶', qty: 1 });
+      }
+    }
   },
   default: {
     lines: [
@@ -67,20 +75,13 @@ export class DialogueScene extends Phaser.Scene {
   create() {
     const { width, height } = this.cameras.main;
 
-    // Overlay escuro
-    this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.55)
-      .setDepth(DEPTH.DIALOGUE)
-      .setScrollFactor(0);
+    this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.35)
+      .setDepth(DEPTH.DIALOGUE).setScrollFactor(0);
 
-    // Caixa de diálogo (mais alta)
-    const boxY = height - 42;
-    this.add.image(width / 2, boxY, 'dialogue_box')
-      .setDepth(DEPTH.DIALOGUE + 1)
-      .setScrollFactor(0);
+    this.add.image(width / 2, height - 40, 'dialogue_box')
+      .setDepth(DEPTH.DIALOGUE + 1).setScrollFactor(0);
 
-    // === TEXTOS COM ALTA LEGIBILIDADE ===
-    // Nome do falante (dourado + stroke)
-    this.nameText = this.add.text(12, height - 78, '', {
+    this.nameText = this.add.text(12, height - 74, '', {
       fontFamily: 'Arial, "Microsoft YaHei", sans-serif',
       fontSize: '13px',
       color: '#f0d080',
@@ -89,7 +90,6 @@ export class DialogueScene extends Phaser.Scene {
       strokeThickness: 3
     }).setDepth(DEPTH.DIALOGUE + 2).setScrollFactor(0);
 
-    // Hanzi (o mais importante — grande e claro)
     this.hanziText = this.add.text(12, height - 60, '', {
       fontFamily: 'Arial, "Microsoft YaHei", "Noto Sans SC", sans-serif',
       fontSize: '16px',
@@ -100,7 +100,6 @@ export class DialogueScene extends Phaser.Scene {
       wordWrap: { width: width - 28 }
     }).setDepth(DEPTH.DIALOGUE + 2).setScrollFactor(0);
 
-    // Pinyin
     this.pinyinText = this.add.text(12, height - 38, '', {
       fontFamily: 'Arial, sans-serif',
       fontSize: '12px',
@@ -109,7 +108,6 @@ export class DialogueScene extends Phaser.Scene {
       strokeThickness: 3
     }).setDepth(DEPTH.DIALOGUE + 2).setScrollFactor(0);
 
-    // Tradução PT
     this.ptText = this.add.text(12, height - 20, '', {
       fontFamily: 'Arial, sans-serif',
       fontSize: '11px',
@@ -118,7 +116,6 @@ export class DialogueScene extends Phaser.Scene {
       strokeThickness: 2
     }).setDepth(DEPTH.DIALOGUE + 2).setScrollFactor(0);
 
-    // Indicador de avanço
     this.add.text(width - 10, height - 8, 'E / Espaço ▶', {
       fontFamily: 'Arial, sans-serif',
       fontSize: '10px',
