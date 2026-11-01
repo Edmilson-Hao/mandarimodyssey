@@ -1,17 +1,16 @@
 /**
- * WorldScene — Exploração do mundo (versão 1.0).
- * Mapa com tiles reais, decorações, animações e colisões.
+ * WorldScene — Exploração (v1.1)
+ * Usa MapManager, múltiplos NPCs, QuestSystem e InventorySystem.
  */
 
 import { Player } from '../entities/Player.js';
 import { NPC } from '../entities/NPC.js';
-import { DEPTH, GAME_WIDTH, GAME_HEIGHT } from '../config/gameConfig.js';
+import { MapManager } from '../world/MapManager.js';
+import { DEPTH } from '../config/gameConfig.js';
+import { quests } from '../systems/QuestSystem.js';
+import { inventory } from '../systems/InventorySystem.js';
+import { events } from '../systems/EventManager.js';
 
-/**
- * Mapa 24×14 tiles (384×224)
- * 0 = grama, 1 = caminho, 2 = água, 3 = parede
- * 4 = árvore, 5 = flor, 6 = pedra
- */
 const MAP_DATA = [
   [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
   [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
@@ -29,13 +28,24 @@ const MAP_DATA = [
   [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
 ];
 
-const TILE_SIZE = 16;
-const MAP_W = MAP_DATA[0].length * TILE_SIZE;
-const MAP_H = MAP_DATA.length * TILE_SIZE;
-
-const GRASS_KEYS = ['tile_grass_01', 'tile_grass_02', 'tile_grass_03'];
-const PATH_KEYS = ['tile_path_01', 'tile_path_02'];
-const WATER_KEYS = ['tile_water_01', 'tile_water_02'];
+const NPC_DEFS = [
+  {
+    id: 'merchant_01',
+    name: '老板 (Lǎo Bǎn)',
+    texture: 'npc_merchant',
+    x: 176, y: 112,
+    facing: 'down',
+    dialogueKey: 'merchant_greeting'
+  },
+  {
+    id: 'scholar_01',
+    name: '先生 (Xiān Sheng)',
+    texture: 'npc_scholar',
+    x: 288, y: 160,
+    facing: 'left',
+    dialogueKey: 'scholar_greeting'
+  }
+];
 
 export class WorldScene extends Phaser.Scene {
   constructor() {
@@ -43,93 +53,42 @@ export class WorldScene extends Phaser.Scene {
     this.player = null;
     this.npcs = [];
     this.nearbyNPC = null;
+    this.mapManager = null;
   }
 
   create() {
-    this.physics.world.setBounds(0, 0, MAP_W, MAP_H);
-
-    this.createMap();
+    // Mapa
+    this.mapManager = new MapManager(this, MAP_DATA).build();
+    const bounds = this.mapManager.getBounds();
 
     // Player
     this.player = new Player(this, 80, 100);
 
-    // NPC mercador
-    const merchant = new NPC(this, 176, 112, {
-      id: 'merchant_01',
-      name: '老板 (Lǎo Bǎn)',
-      texture: 'npc_merchant',
-      dialogueKey: 'merchant_greeting',
-      facing: 'down'
-    });
-    this.npcs.push(merchant);
+    // NPCs
+    this.npcs = NPC_DEFS.map(def => new NPC(this, def.x, def.y, def));
 
     // Colisões
-    this.physics.add.collider(this.player.sprite, this.walls);
+    this.physics.add.collider(this.player.sprite, this.mapManager.getWalls());
     this.npcs.forEach(npc => {
       this.physics.add.collider(this.player.sprite, npc.sprite);
     });
 
     // Câmera
-    this.cameras.main.setBounds(0, 0, MAP_W, MAP_H);
+    this.cameras.main.setBounds(0, 0, bounds.width, bounds.height);
     this.cameras.main.startFollow(this.player.sprite, true, 0.12, 0.12);
     this.cameras.main.setRoundPixels(true);
 
-    this.events.on('dialogue-closed', () => {});
-  }
-
-  createMap() {
-    this.walls = this.physics.add.staticGroup();
-
-    for (let row = 0; row < MAP_DATA.length; row++) {
-      for (let col = 0; col < MAP_DATA[row].length; col++) {
-        const tileType = MAP_DATA[row][col];
-        const x = col * TILE_SIZE + TILE_SIZE / 2;
-        const y = row * TILE_SIZE + TILE_SIZE / 2;
-        const seed = (row * 17 + col * 31) % 3;
-
-        let key = GRASS_KEYS[seed % 3];
-        let depth = DEPTH.GROUND;
-        let collide = false;
-
-        if (tileType === 1) {
-          key = PATH_KEYS[seed % 2];
-        } else if (tileType === 2) {
-          key = WATER_KEYS[seed % 2];
-          collide = true;
-        } else if (tileType === 3) {
-          key = 'tile_wall';
-          collide = true;
-        } else if (tileType === 4) {
-          // grama + árvore por cima
-          this.add.image(x, y, GRASS_KEYS[seed % 3]).setDepth(DEPTH.GROUND);
-          key = 'tile_tree';
-          depth = DEPTH.OBJECTS;
-          collide = true;
-        } else if (tileType === 5) {
-          this.add.image(x, y, GRASS_KEYS[seed % 3]).setDepth(DEPTH.GROUND);
-          key = 'tile_flower';
-          depth = DEPTH.OBJECTS;
-        } else if (tileType === 6) {
-          this.add.image(x, y, GRASS_KEYS[seed % 3]).setDepth(DEPTH.GROUND);
-          key = 'tile_rock';
-          depth = DEPTH.OBJECTS;
-          collide = true;
-        }
-
-        const img = this.add.image(x, y, key).setDepth(depth);
-
-        if (collide) {
-          const body = this.walls.create(x, y, key);
-          body.setVisible(false);
-          body.refreshBody();
-          // hitbox um pouco menor para árvores/pedras
-          if (tileType === 4 || tileType === 6) {
-            body.setSize(12, 12);
-            body.setOffset(2, 2);
-          }
-        }
-      }
-    }
+    // Eventos de quest/inventário (feedback visual simples via UIScene)
+    events.on('quest-completed', (q) => {
+      console.log('[Quest] Completa:', q.title);
+    });
+    events.on('quest-reward', (reward) => {
+      inventory.addItem(reward);
+      console.log('[Reward]', reward.nameZh || reward.name);
+    });
+    events.on('inventory-updated', (items) => {
+      // UIScene pode escutar isso depois
+    });
   }
 
   update() {

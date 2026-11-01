@@ -53,7 +53,7 @@ export class MenuScene extends Phaser.Scene {
       color: '#666666'
     }).setOrigin(0.5);
 
-    this.add.text(width / 2, height - 14, 'v1.0', {
+    this.add.text(width / 2, height - 14, 'v1.1', {
       fontFamily: 'Courier New',
       fontSize: '6px',
       color: '#444444'

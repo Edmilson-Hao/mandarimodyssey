@@ -1,5 +1,5 @@
 /**
- * Ponto de entrada — Mandarin Odyssey v1.0
+ * Ponto de entrada — Mandarin Odyssey v1.1
  * Inicializa Phaser e registra todas as cenas.
  */
 

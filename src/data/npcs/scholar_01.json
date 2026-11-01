@@ -1,0 +1,12 @@
+{
+  "id": "scholar_01",
+  "name": "先生",
+  "namePinyin": "Xiān Sheng",
+  "namePt": "Sábio",
+  "texture": "npc_scholar",
+  "x": 288,
+  "y": 160,
+  "facing": "left",
+  "dialogueKey": "scholar_greeting",
+  "questStep": "talk_scholar"
+}

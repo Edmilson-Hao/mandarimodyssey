@@ -2,11 +2,11 @@
   "id": "merchant_01",
   "name": "老板",
   "namePinyin": "Lǎo Bǎn",
-  "namePt": "Chefe / Dono da loja",
+  "namePt": "Mercador",
   "texture": "npc_merchant",
-  "x": 160,
-  "y": 96,
+  "x": 176,
+  "y": 112,
+  "facing": "down",
   "dialogueKey": "merchant_greeting",
-  "hskLevel": 1,
-  "vocabulary": ["你好", "欢迎", "商店", "买"]
+  "questStep": "talk_merchant"
 }

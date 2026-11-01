@@ -1,5 +1,5 @@
 /**
- * PreloadScene — Carrega todos os assets PNG reais da versão 1.0.
+ * PreloadScene — Carrega todos os assets PNG reais (v1.1).
  */
 
 export class PreloadScene extends Phaser.Scene {
@@ -11,7 +11,6 @@ export class PreloadScene extends Phaser.Scene {
     const width = this.cameras.main.width;
     const height = this.cameras.main.height;
 
-    // Fundo da tela de loading
     this.add.rectangle(width / 2, height / 2, width, height, 0x1a1a2e);
 
     this.add.text(width / 2, height / 2 - 30, 'MANDARIN ODYSSEY', {
@@ -47,12 +46,13 @@ export class PreloadScene extends Phaser.Scene {
 
     // ===== SPRITES =====
     this.load.spritesheet('player', 'assets/sprites/player.png', {
-      frameWidth: 32,
-      frameHeight: 48
+      frameWidth: 32, frameHeight: 48
     });
     this.load.spritesheet('npc_merchant', 'assets/sprites/npc_merchant.png', {
-      frameWidth: 32,
-      frameHeight: 48
+      frameWidth: 32, frameHeight: 48
+    });
+    this.load.spritesheet('npc_scholar', 'assets/sprites/npc_scholar.png', {
+      frameWidth: 32, frameHeight: 48
     });
 
     // ===== TILES =====
@@ -79,55 +79,29 @@ export class PreloadScene extends Phaser.Scene {
     this.scene.start('MenuScene');
   }
 
-  /**
-   * Cria todas as animações a partir dos spritesheets.
-   * Layout do sheet: colunas = frames (0=idle, 1=walk1, 2=walk2)
-   *                  linhas  = direções (0=down, 1=left, 2=right, 3=up)
-   */
   createAnimations() {
     const dirs = ['down', 'left', 'right', 'up'];
+    const characters = ['player', 'npc_merchant', 'npc_scholar'];
 
-    // Player
-    dirs.forEach((dir, row) => {
-      // idle (frame único)
-      this.anims.create({
-        key: `player_idle_${dir}`,
-        frames: [{ key: 'player', frame: row * 3 + 0 }],
-        frameRate: 1,
-        repeat: -1
-      });
-      // walk
-      this.anims.create({
-        key: `player_walk_${dir}`,
-        frames: [
-          { key: 'player', frame: row * 3 + 1 },
-          { key: 'player', frame: row * 3 + 0 },
-          { key: 'player', frame: row * 3 + 2 },
-          { key: 'player', frame: row * 3 + 0 }
-        ],
-        frameRate: 8,
-        repeat: -1
-      });
-    });
-
-    // NPC Merchant
-    dirs.forEach((dir, row) => {
-      this.anims.create({
-        key: `npc_merchant_idle_${dir}`,
-        frames: [{ key: 'npc_merchant', frame: row * 3 + 0 }],
-        frameRate: 1,
-        repeat: -1
-      });
-      this.anims.create({
-        key: `npc_merchant_walk_${dir}`,
-        frames: [
-          { key: 'npc_merchant', frame: row * 3 + 1 },
-          { key: 'npc_merchant', frame: row * 3 + 0 },
-          { key: 'npc_merchant', frame: row * 3 + 2 },
-          { key: 'npc_merchant', frame: row * 3 + 0 }
-        ],
-        frameRate: 6,
-        repeat: -1
+    characters.forEach(char => {
+      dirs.forEach((dir, row) => {
+        this.anims.create({
+          key: `${char}_idle_${dir}`,
+          frames: [{ key: char, frame: row * 3 + 0 }],
+          frameRate: 1,
+          repeat: -1
+        });
+        this.anims.create({
+          key: `${char}_walk_${dir}`,
+          frames: [
+            { key: char, frame: row * 3 + 1 },
+            { key: char, frame: row * 3 + 0 },
+            { key: char, frame: row * 3 + 2 },
+            { key: char, frame: row * 3 + 0 }
+          ],
+          frameRate: char === 'player' ? 8 : 6,
+          repeat: -1
+        });
       });
     });
   }
