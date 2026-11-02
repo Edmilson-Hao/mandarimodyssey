@@ -52,7 +52,10 @@ export class PreloadScene extends Phaser.Scene {
     tiles.forEach(t => this.load.image(t, `assets/tiles/${t}.png`));
 
     // Props
-    ['prop_lantern','prop_barrel','prop_crate','prop_table','prop_fence','prop_well'].forEach(p => {
+    [
+      'prop_lantern','prop_barrel','prop_crate','prop_table','prop_fence','prop_well',
+      'prop_bush','prop_tree_top','prop_tree_trunk','prop_house_red','prop_house_thatch'
+    ].forEach(p => {
       this.load.image(p, `assets/props/${p}.png`);
     });
 
